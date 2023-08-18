@@ -1,9 +1,11 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Sidebar } from "@/components/Sidebar";
+import ClientToast from "@/components/client/ClientToast";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/theme-toggle";
-import { Toaster } from "@/components/ui/toaster";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { AuthAlert } from "@/components/client/AuthAlert";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +27,20 @@ export default function RootLayout({
 					defaultTheme="system"
 					enableSystem
 				>
-					{children}
-					<div className="absolute top-6 right-6">
-						<ModeToggle />
+					<div className="h-screen">
+						<div className="grid grid-cols-4 h-full">
+							<Sidebar />
+							<div
+								className="col-span-3 border-x-[1px] 
+								border-neutral-200 
+              dark:border-neutral-800 lg:col-span-2"
+							>
+								{children}
+							</div>
+						</div>
 					</div>
-					<Toaster />
+					<ClientToast />
+					<ModeToggle />
 				</ThemeProvider>
 			</body>
 		</html>

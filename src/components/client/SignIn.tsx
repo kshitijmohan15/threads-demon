@@ -1,16 +1,16 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { catchError, cn } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 import * as React from "react";
 import { FC } from "react";
-import { Button } from "./ui/button";
-import { useToast } from "./ui/use-toast";
+import { Button } from "../ui/button";
+import { toast } from "sonner";
+import { FcGoogle } from "react-icons/fc";
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface SignInWithGoogleProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
-	const { toast } = useToast();
+const SignIn: FC<SignInWithGoogleProps> = ({ className, ...props }) => {
 	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 	const loginWithGoogle = async () => {
@@ -19,11 +19,7 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
 		try {
 			await signIn("google");
 		} catch (error) {
-			toast({
-				title: "Error",
-				description: "There was an error logging in with Google",
-				variant: "destructive",
-			});
+			catchError(error);
 		} finally {
 			setIsLoading(false);
 		}
@@ -33,15 +29,15 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
 		<div className={cn("flex justify-center", className)} {...props}>
 			<Button
 				type="button"
-				size="sm"
-				className="w-full"
+				className="flex gap-2"
 				onClick={loginWithGoogle}
 				disabled={isLoading}
 			>
-				Google
+				<FcGoogle className="text-lg" />
+				<p className="md:block hidden">Google</p>
 			</Button>
 		</div>
 	);
 };
 
-export default UserAuthForm;
+export default SignIn;
